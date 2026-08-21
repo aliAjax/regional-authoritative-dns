@@ -21,5 +21,5 @@ func (s *State) Get(name string) (domain.Result, bool) {
 }
 func (s *State) Expired(name string, d time.Duration) bool {
 	r, ok := s.Get(name)
-	return !ok || time.Since(r.CheckedAt) > d
+	return !ok || time.Since(r.CheckedAt) < 0 || time.Since(r.CheckedAt) > d
 }
