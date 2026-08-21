@@ -22,11 +22,11 @@ func (s *Service) Upsert(ctx context.Context, zone string, records domain.Set) e
 	normalized := make(domain.Set, 0, len(records))
 	seen := map[string]bool{}
 	for _, r := range records {
+		r = r.Normalize()
 		if seen[r.Key()] {
 			continue
 		}
 		seen[r.Key()] = true
-		r = r.Normalize()
 		if e := r.Validate(); e != nil {
 			return fmt.Errorf("%s: %w", r.Name, e)
 		}

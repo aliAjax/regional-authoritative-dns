@@ -52,9 +52,6 @@ func (r Record) Normalize() Record {
 	if r.View == "" {
 		r.View = "public"
 	}
-	if !r.Healthy {
-		r.Healthy = true
-	}
 	return r
 }
 func (r Record) Validate() error {

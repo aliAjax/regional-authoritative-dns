@@ -17,7 +17,15 @@ func (s Set) Sort() Set {
 func (s Set) Find(name string, t Type, view string) []Record {
 	var out []Record
 	for _, r := range s {
-		if r.Name == name && r.Type == t && (r.View == view || r.View == "public") {
+		if r.Name == name && r.Type == t && r.View == view {
+			out = append(out, r)
+		}
+	}
+	if len(out) > 0 {
+		return out
+	}
+	for _, r := range s {
+		if r.Name == name && r.Type == t && r.View == "public" {
 			out = append(out, r)
 		}
 	}

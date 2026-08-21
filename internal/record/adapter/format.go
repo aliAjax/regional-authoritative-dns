@@ -21,6 +21,7 @@ func ParseLine(line string) (domain.Record, error) {
 	r.TTL = ttl
 	r.Type = domain.Type(f[3])
 	r.Data = strings.Join(f[4:], " ")
+	r = r.Normalize()
 	return r, r.Validate()
 }
 func Format(r domain.Record) string {
