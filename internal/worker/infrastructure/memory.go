@@ -12,6 +12,9 @@ type Memory struct {
 }
 
 func (m *Memory) Save(ctx context.Context, j domain.Job) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	for i, x := range m.items {

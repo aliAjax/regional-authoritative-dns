@@ -10,5 +10,5 @@ type Job struct {
 }
 
 func (j Job) Runnable(now time.Time) bool {
-	return j.Status != "completed"
+	return j.Status != "completed" && !j.NextRun.After(now)
 }

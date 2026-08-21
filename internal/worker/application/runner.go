@@ -43,10 +43,14 @@ func (s *Runner) Run(ctx context.Context) {
 	}
 }
 func (s *Runner) once(ctx context.Context) {
+	now := time.Now().UTC()
 	jobs, _ := s.Repo.List(ctx)
 	for _, j := range jobs {
 		h := s.Handlers[j.Kind]
 		if h == nil || j.Status == "completed" || j.Status == "failed" {
+			continue
+		}
+		if j.NextRun.After(now) {
 			continue
 		}
 		j.Status = "running"

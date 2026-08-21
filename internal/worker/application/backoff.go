@@ -15,6 +15,12 @@ func Backoff(attempt int, base, max time.Duration) time.Duration {
 	d := base
 	for i := 0; i < attempt && d < max; i++ {
 		d *= 2
+		if d > max {
+			d = max
+		}
+	}
+	if d > max {
+		d = max
 	}
 	return d
 }
