@@ -49,7 +49,9 @@ func (m *Memory) List(ctx context.Context) ([]zoned.Zone, error) {
 	for _, z := range m.zones {
 		out = append(out, z)
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].ID > out[j].ID })
+	// Stable, deterministic order: ascending by zone ID so callers see the same
+	// sequence every run regardless of map iteration order.
+	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
 	return out, nil
 }
 

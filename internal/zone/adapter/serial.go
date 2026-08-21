@@ -21,6 +21,11 @@ func ParseSerial(s string) (uint32, error) {
 	}
 	return uint32(n), nil
 }
+// IsNewer reports whether serial a is newer than serial b using RFC 1982
+// sequence-space arithmetic. The serial wraps modulo 2^32, so a value just
+// past zero is newer than one just below the maximum. Comparing the signed
+// distance between the two handles the wraparound: a is newer iff the signed
+// difference a-b lies in (0, 2^31].
 func IsNewer(a, b uint32) bool {
-	return a > b
+	return int32(a-b) > 0
 }

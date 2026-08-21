@@ -32,13 +32,7 @@ func (s *Service) Resolve(ctx context.Context, zoneName string, q resdomain.Quer
 			return resdomain.Result{ServFail: true}, e
 		}
 	}
-	q.Name = strings.ToLower(q.Name)
-	if !strings.HasSuffix(q.Name, ".") {
-		q.Name += "."
-	}
-	if q.View == "" {
-		q.View = "public"
-	}
+	q = q.Normalize()
 	found := records.Find(q.Name, q.Type, q.View)
 	if len(found) == 0 {
 		for _, r := range records {
@@ -81,15 +75,17 @@ func (s *Service) Resolve(ctx context.Context, zoneName string, q resdomain.Quer
 }
 
 func (s *Service) ResolveName(ctx context.Context, q resdomain.Query) (resdomain.Result, error) {
-	for _, z := range func() []struct{ ID, Name string } {
-		zones, _ := s.Zones.List(ctx)
-		out := make([]struct{ ID, Name string }, 0, len(zones))
-		for _, z := range zones {
-			out = append(out, struct{ ID, Name string }{z.ID, z.Name})
-		}
-		sort.Slice(out, func(i, j int) bool { return len(out[i].Name) < len(out[j].Name) })
-		return out
-	}() {
+	zones, _ := s.Zones.List(ctx)
+	out := make([]struct{ ID, Name string }, 0, len(zones))
+	for _, z := range zones {
+		out = append(out, struct{ ID, Name string }{z.ID, z.Name})
+	}
+	// Most-specific zone first: a longer name matches a deeper delegation, so it
+	// must be tried before any parent zone whose suffix also matches. Sorting by
+	// descending name length guarantees the child zone is consulted before the
+	// parent and the parent's NXDOMAIN can never mask a record the child holds.
+	sort.Slice(out, func(i, j int) bool { return len(out[i].Name) > len(out[j].Name) })
+	for _, z := range out {
 		if strings.HasSuffix(strings.ToLower(q.Name), strings.TrimPrefix(strings.ToLower(z.Name), ".")) {
 			if r, e := s.Resolve(ctx, z.ID, q); e == nil && !r.ServFail {
 				return r, nil
