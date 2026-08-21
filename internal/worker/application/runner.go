@@ -46,7 +46,7 @@ func (s *Runner) once(ctx context.Context) {
 	jobs, _ := s.Repo.List(ctx)
 	for _, j := range jobs {
 		h := s.Handlers[j.Kind]
-		if h == nil || j.Status == "completed" {
+		if h == nil || j.Status == "completed" || j.Status == "failed" {
 			continue
 		}
 		j.Status = "running"

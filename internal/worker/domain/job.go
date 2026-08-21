@@ -8,3 +8,7 @@ type Job struct {
 	NextRun                  time.Time
 	Error                    string
 }
+
+func (j Job) Runnable(now time.Time) bool {
+	return j.Status != "completed"
+}
