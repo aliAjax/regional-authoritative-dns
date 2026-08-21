@@ -16,6 +16,9 @@ type Key struct {
 	Active               bool
 	CreatedAt, ExpiresAt time.Time
 }
+
+func (k Key) ActiveAt(now time.Time) bool { return k.Active }
+
 type Verification struct {
 	Valid              bool
 	Zone, Name, Reason string

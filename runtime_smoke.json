@@ -1,0 +1,11 @@
+{
+  "mode": "service",
+  "start": "go run ./cmd/server",
+  "env": {
+    "DNS_HTTP_ADDR": "127.0.0.1:18080",
+    "DNS_ADDR": "127.0.0.1:15353"
+  },
+  "ready_url": "http://127.0.0.1:18080/healthz",
+  "startup_timeout_seconds": 30,
+  "shutdown_timeout_seconds": 10
+}
