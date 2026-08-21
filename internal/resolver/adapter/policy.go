@@ -30,8 +30,13 @@ func (p ViewPolicy) Matches(ip string) bool {
 	return false
 }
 func SelectView(p []ViewPolicy, ip string) string {
-	sort.Slice(p, func(i, j int) bool { return p[i].Priority > p[j].Priority })
-	for _, x := range p {
+	// Sort a private copy so the caller's slice is never reordered. The
+	// original sort mutated the shared input in place, which both surprised
+	// callers and raced when SelectView was invoked concurrently.
+	sorted := make([]ViewPolicy, len(p))
+	copy(sorted, p)
+	sort.Slice(sorted, func(i, j int) bool { return sorted[i].Priority > sorted[j].Priority })
+	for _, x := range sorted {
 		if x.Matches(ip) {
 			return x.Name
 		}

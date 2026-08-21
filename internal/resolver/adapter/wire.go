@@ -117,6 +117,9 @@ func readName(b []byte, off *int) (string, error) {
 		if n == 0 {
 			break
 		}
+		if n > 63 {
+			return "", fmt.Errorf("label too long")
+		}
 		if n&0xc0 != 0 {
 			return "", fmt.Errorf("compressed question unsupported")
 		}

@@ -37,5 +37,10 @@ func Truncate(b []byte, size int) []byte {
 	if size <= 0 || len(b) <= size {
 		return b
 	}
-	return append(b[:size], 0)
+	// Return an isolated slice so the caller's buffer is not mutated and the
+	// result does not alias the input. append(b[:size], 0) would write the
+	// trailing byte into the caller's backing array.
+	out := make([]byte, size)
+	copy(out, b[:size])
+	return out
 }
