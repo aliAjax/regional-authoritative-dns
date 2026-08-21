@@ -19,7 +19,7 @@ func ParseLine(line string) (domain.Record, error) {
 		return r, e
 	}
 	r.TTL = ttl
-	r.Type = domain.Type(strings.ToUpper(f[3]))
+	r.Type = domain.Type(f[3])
 	r.Data = strings.Join(f[4:], " ")
 	return r, r.Validate()
 }
