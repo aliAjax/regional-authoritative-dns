@@ -37,5 +37,5 @@ func Truncate(b []byte, size int) []byte {
 	if size <= 0 || len(b) <= size {
 		return b
 	}
-	return append(append([]byte{}, b[:size]...), 0)
+	return append(b[:size], 0)
 }

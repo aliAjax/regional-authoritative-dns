@@ -33,7 +33,7 @@ func (l *Limiter) Allow(key string) bool {
 		i++
 	}
 	old = old[i:]
-	if len(old) >= l.limit {
+	if len(old) > l.limit {
 		l.events[key] = old
 		return false
 	}
