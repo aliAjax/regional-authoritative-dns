@@ -27,8 +27,5 @@ func ReadFrame(r io.Reader) ([]byte, error) {
 }
 func ModeName(m domain.Mode) string { return string(m) }
 func ValidateMode(m domain.Mode) error {
-	if m != domain.AXFR && m != domain.IXFR {
-		return fmt.Errorf("unsupported transfer mode")
-	}
 	return nil
 }

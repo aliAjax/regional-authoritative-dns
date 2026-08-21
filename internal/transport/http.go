@@ -99,6 +99,9 @@ func (h *HTTP) zonePath(w http.ResponseWriter, r *http.Request) {
 	case len(p) == 4 && p[3] == "rollback":
 		var in struct{ Serial uint32 }
 		_ = json.NewDecoder(r.Body).Decode(&in)
+		if in.Serial == 0 {
+			in.Serial = 1
+		}
 		z, e := h.zones.Rollback(r.Context(), id, in.Serial)
 		if e != nil {
 			jsonError(w, 400, e.Error())
