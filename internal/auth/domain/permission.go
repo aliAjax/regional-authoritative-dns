@@ -6,5 +6,5 @@ type Permission struct {
 }
 
 func (p Permission) Matches(zone, action string) bool {
-	return p.Allow && (p.Zone == "*" || p.Zone == zone) && (p.Action == "*" || p.Action == action)
+	return (p.Zone == "*" || p.Zone == zone) && (p.Action == "*" || p.Action == action)
 }
