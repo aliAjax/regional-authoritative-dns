@@ -24,6 +24,9 @@ func (s *Service) Verify(ctx context.Context, zone, name string, rs record.Set) 
 	if e := rs.Validate(); e != nil {
 		return domain.Verification{}, e
 	}
+	if len(rs) == 0 {
+		return domain.Verification{}, fmt.Errorf("record set required")
+	}
 	ks := []domain.Key{}
 	if s.Keys != nil {
 		var e error

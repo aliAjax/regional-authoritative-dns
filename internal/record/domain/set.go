@@ -1,16 +1,20 @@
 package domain
 
-import "sort"
+import (
+	"sort"
+	"strings"
+)
 
 type Set []Record
 
 func (s Set) Sort() Set {
 	out := append(Set{}, s...)
-	sort.Slice(out, func(i, j int) bool {
-		if out[i].Name == out[j].Name {
+	sort.SliceStable(out, func(i, j int) bool {
+		li, lj := strings.ToLower(out[i].Name), strings.ToLower(out[j].Name)
+		if li == lj {
 			return out[i].Type < out[j].Type
 		}
-		return out[i].Name < out[j].Name
+		return li < lj
 	})
 	return out
 }

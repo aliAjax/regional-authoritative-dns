@@ -17,7 +17,18 @@ type Key struct {
 	CreatedAt, ExpiresAt time.Time
 }
 
-func (k Key) ActiveAt(now time.Time) bool { return k.Active }
+func (k Key) ActiveAt(now time.Time) bool {
+	if !k.Active {
+		return false
+	}
+	if !k.CreatedAt.IsZero() && now.Before(k.CreatedAt) {
+		return false
+	}
+	if !k.ExpiresAt.IsZero() && now.After(k.ExpiresAt) {
+		return false
+	}
+	return true
+}
 
 type Verification struct {
 	Valid              bool

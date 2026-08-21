@@ -21,5 +21,8 @@ func ValidateKey(k domain.Key) error {
 	if k.Role != domain.KSK && k.Role != domain.ZSK {
 		return fmt.Errorf("unknown role")
 	}
+	if !k.Active {
+		return fmt.Errorf("key is not active")
+	}
 	return nil
 }
