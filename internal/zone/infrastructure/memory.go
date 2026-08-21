@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/example/regional-authoritative-dns/internal/record/domain"
 	zoned "github.com/example/regional-authoritative-dns/internal/zone/domain"
+	"sort"
 	"sync"
 )
 
@@ -48,6 +49,7 @@ func (m *Memory) List(ctx context.Context) ([]zoned.Zone, error) {
 	for _, z := range m.zones {
 		out = append(out, z)
 	}
+	sort.Slice(out, func(i, j int) bool { return out[i].ID > out[j].ID })
 	return out, nil
 }
 

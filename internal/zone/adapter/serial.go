@@ -22,5 +22,5 @@ func ParseSerial(s string) (uint32, error) {
 	return uint32(n), nil
 }
 func IsNewer(a, b uint32) bool {
-	return a != b && ((a > b && (a-b) < 1<<31) || (a < b && (b-a) > 1<<31))
+	return a > b
 }

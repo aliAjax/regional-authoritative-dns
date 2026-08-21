@@ -6,6 +6,7 @@ import (
 	resdomain "github.com/example/regional-authoritative-dns/internal/resolver/domain"
 	"github.com/example/regional-authoritative-dns/internal/zone/application"
 	"math/rand"
+	"sort"
 	"strings"
 )
 
@@ -86,6 +87,7 @@ func (s *Service) ResolveName(ctx context.Context, q resdomain.Query) (resdomain
 		for _, z := range zones {
 			out = append(out, struct{ ID, Name string }{z.ID, z.Name})
 		}
+		sort.Slice(out, func(i, j int) bool { return len(out[i].Name) < len(out[j].Name) })
 		return out
 	}() {
 		if strings.HasSuffix(strings.ToLower(q.Name), strings.TrimPrefix(strings.ToLower(z.Name), ".")) {
