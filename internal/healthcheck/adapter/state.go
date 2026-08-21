@@ -21,5 +21,15 @@ func (s *State) Get(name string) (domain.Result, bool) {
 }
 func (s *State) Expired(name string, d time.Duration) bool {
 	r, ok := s.Get(name)
-	return !ok || time.Since(r.CheckedAt) < 0 || time.Since(r.CheckedAt) > d
+	if !ok {
+		return true
+	}
+	// A result whose CheckedAt is in the future (clock skew, or a refresh that
+	// stamped ahead of now) is treated as fresh rather than expired, so the
+	// negative age must not be reported as expired.
+	age := time.Since(r.CheckedAt)
+	if age < 0 {
+		return false
+	}
+	return age > d
 }
