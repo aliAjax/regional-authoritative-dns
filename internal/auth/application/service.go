@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"fmt"
+
 	"github.com/example/regional-authoritative-dns/internal/auth/domain"
 )
 
@@ -15,7 +16,7 @@ func New(r Repository) *Service { return &Service{Repo: r} }
 func (s *Service) Authorize(ctx context.Context, subject, zone, action string) error {
 	ps, e := s.Repo.Permissions(ctx, subject)
 	if e != nil {
-		return fmt.Errorf("load permissions: %v", e)
+		return fmt.Errorf("load permissions: %w", e)
 	}
 	for _, p := range ps {
 		if p.Matches(zone, action) {

@@ -22,7 +22,17 @@ func Bearer(r *http.Request) (string, bool) {
 	if len(v) < 7 || !strings.EqualFold(v[:6], "Bearer") {
 		return "", false
 	}
-	return strings.TrimSpace(v[6:]), true
+	// The scheme must be separated from the token by whitespace, otherwise a
+	// value like "BearerToken" is misread as a credential and surfaces as a
+	// bogus audit subject.
+	if v[6] != ' ' && v[6] != '\t' {
+		return "", false
+	}
+	token := strings.TrimSpace(v[6:])
+	if token == "" {
+		return "", false
+	}
+	return token, true
 }
 func MaskSecret(v string) string {
 	if len(v) < 4 {
