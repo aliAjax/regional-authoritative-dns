@@ -1,0 +1,6 @@
+http_addr: ":8080"
+dns_addr: ":5353"
+api_key: "dev-api-key"
+max_body: 1048576
+query_timeout: "5s"
+database_url: "postgres://dns:dns@localhost:5432/dns?sslmode=disable"

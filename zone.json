@@ -1,0 +1,1 @@
+{"name":"example.com.","defaultTTL":60,"views":["public","internal"],"records":[{"name":"www.example.com.","type":"A","ttl":60,"data":"192.0.2.10","view":"public"},{"name":"api.example.com.","type":"AAAA","ttl":60,"data":"2001:db8::10","view":"public"},{"name":"*.example.com.","type":"CNAME","ttl":300,"data":"edge.example.net.","view":"public"}]}

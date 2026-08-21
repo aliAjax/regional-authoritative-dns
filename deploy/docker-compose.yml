@@ -1,0 +1,13 @@
+services:
+  dns:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "8080:8080"
+      - "5353:5353/udp"
+      - "5353:5353/tcp"
+    environment:
+      DNS_HTTP_ADDR: ":8080"
+      DNS_ADDR: ":5353"
+      DNS_API_KEY: "dev-api-key"

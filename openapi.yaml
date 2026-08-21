@@ -1,0 +1,22 @@
+openapi: 3.0.3
+info:
+  title: Regional Authoritative DNS
+  version: 1.0.0
+paths:
+  /v1/zones:
+    post:
+      summary: Create a zone with an initial record set
+    get:
+      summary: List zones
+  /v1/zones/{id}/records:
+    get:
+      summary: Read the active records
+  /v1/zones/{id}/versions:
+    post:
+      summary: Store a version using optimistic concurrency
+  /v1/zones/{id}/publish:
+    post:
+      summary: Publish the current version
+  /v1/dnssec/verify:
+    post:
+      summary: Verify DNSSEC metadata

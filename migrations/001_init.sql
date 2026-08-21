@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS zones (id text PRIMARY KEY, name text NOT NULL UNIQUE, serial bigint NOT NULL, status text NOT NULL, default_ttl integer NOT NULL, version bigint NOT NULL, created_at timestamptz NOT NULL, updated_at timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS record_sets (zone_id text NOT NULL, name text NOT NULL, type text NOT NULL, ttl integer NOT NULL, data text NOT NULL, view_name text NOT NULL, healthy boolean NOT NULL DEFAULT true, PRIMARY KEY(zone_id,name,type,data,view_name));
+CREATE TABLE IF NOT EXISTS publication_events (id text PRIMARY KEY, zone_id text NOT NULL, action text NOT NULL, actor text NOT NULL, reason text NOT NULL, request_id text NOT NULL, summary text NOT NULL, created_at timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS transfer_runs (id text PRIMARY KEY, zone_id text NOT NULL, target text NOT NULL, mode text NOT NULL, from_serial bigint NOT NULL, to_serial bigint NOT NULL, status text NOT NULL, attempts integer NOT NULL, error text NOT NULL, started_at timestamptz NOT NULL, finished_at timestamptz);
+CREATE INDEX IF NOT EXISTS idx_records_zone_name ON record_sets(zone_id,name);
