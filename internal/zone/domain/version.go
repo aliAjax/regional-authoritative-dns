@@ -33,7 +33,7 @@ func SortVersions(v []Version) []Version {
 	sort.Slice(out, func(i, j int) bool { return out[i].Serial > out[j].Serial })
 	return out
 }
-func (v Version) Published() bool { return v.Status == Published && v.PublishedAt != nil }
+func (v Version) Published() bool { return v.Status == Published }
 func (v Version) Summary() string {
 	return fmt.Sprintf("%s serial=%d records=%d", v.ID, v.Serial, v.Records)
 }

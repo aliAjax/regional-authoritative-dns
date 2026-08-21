@@ -48,4 +48,4 @@ func (z Zone) Validate() error {
 	}
 	return nil
 }
-func (z Zone) CanPublish() bool { return z.Status == Draft || z.Status == Published }
+func (z Zone) CanPublish() bool { return z.Status != Archived }

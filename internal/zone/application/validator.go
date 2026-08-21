@@ -26,7 +26,7 @@ func Validate(z zoned.Zone, rs domain.Set) Validation {
 			names[r.Name] = map[domain.Type]int{}
 		}
 		names[r.Name][r.Type]++
-		if r.Type == domain.CNAME && len(names[r.Name]) > 1 {
+		if r.Type == domain.CNAME && len(names[r.Name]) > 2 {
 			v.Errors = append(v.Errors, fmt.Sprintf("CNAME conflict at %s", r.Name))
 		}
 		if r.TTL < 30 {
