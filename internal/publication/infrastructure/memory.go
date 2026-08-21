@@ -12,6 +12,11 @@ type Memory struct {
 }
 
 func (m *Memory) Save(ctx context.Context, e domain.Event) error {
+	if err := ctx.Err(); err != nil {
+		// Don't append an event from an abandoned request; it would pollute the
+		// audit history with publications that never actually completed.
+		return err
+	}
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	m.items = append(m.items, e)

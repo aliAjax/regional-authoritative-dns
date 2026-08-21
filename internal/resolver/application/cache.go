@@ -24,6 +24,12 @@ func NewCache(ttl time.Duration) *Cache {
 	return &Cache{ttl: ttl, items: map[string]entry{}}
 }
 func (c *Cache) Get(ctx context.Context, key string) (resdomain.Result, bool) {
+	if ctx.Err() != nil {
+		// A canceled lookup must not surface a stale entry, otherwise a
+		// request that was abandoned after a config refresh would observe the
+		// pre-refresh result and stall propagation of the new zone state.
+		return resdomain.Result{}, false
+	}
 	c.mu.RLock()
 	e, ok := c.items[key]
 	c.mu.RUnlock()
@@ -33,6 +39,11 @@ func (c *Cache) Get(ctx context.Context, key string) (resdomain.Result, bool) {
 	return e.result, true
 }
 func (c *Cache) Put(ctx context.Context, key string, r resdomain.Result) {
+	if ctx.Err() != nil {
+		// Don't materialize a result produced by an abandoned request, as it
+		// would poison the cache for in-flight readers using the same key.
+		return
+	}
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.items[key] = entry{result: r, expires: time.Now().Add(c.ttl)}
